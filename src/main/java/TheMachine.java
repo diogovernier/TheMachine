@@ -35,7 +35,7 @@ public class TheMachine {
 				// 0.5f, -0.5f, 0f, //
 				0.5f, -0.5f, 0f, //
 				0.5f, 0.5f, 0f // , //
-				// -0.5f, 0.5f, 0f //
+				// -0.5f, 0.5f, 0f ///
 		};
 
 		int[] indices = { //
