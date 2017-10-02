@@ -6,7 +6,9 @@ import machine.core.DisplayManager;
 import machine.core.Renderer;
 import machine.model.Loader;
 import machine.model.RawModel;
+import machine.model.TexturedModel;
 import machine.shader.StaticShader;
+import machine.texture.ModelTexture;
 
 public class TheMachine {
 
@@ -42,8 +44,18 @@ public class TheMachine {
 				0, 1, 3, //
 				3, 1, 2 //
 		};
+		
+		float[] textureCoords = {
+				0, 0, //V0
+				0, 1, //V1
+				1, 1, //V2
+				1, 0
+		};
 
-		RawModel model = loader.loadToVAO(vertices, indices);
+		RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("image"));
+		TexturedModel texturedModel = new TexturedModel(model, texture);
+		
 		StaticShader shader = new StaticShader();
 		
 		// Run the rendering loop until the user has attempted to close
@@ -51,7 +63,7 @@ public class TheMachine {
 		while (!displayManager.shouldCloseWindow()) {
 			renderer.beginRender();
 			shader.start();
-			renderer.render(model);
+			renderer.render(texturedModel);
 			shader.stop();
 			renderer.finishRender();
 
