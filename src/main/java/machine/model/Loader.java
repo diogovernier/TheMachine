@@ -1,5 +1,8 @@
 package machine.model;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -10,11 +13,14 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
 
 public class Loader {
 
 	public List<Integer> vaos = new ArrayList<Integer>();
 	public List<Integer> vbos = new ArrayList<Integer>();
+	public List<Integer> textures = new ArrayList<Integer>();
 
 	public RawModel loadToVAO(float[] positions, int[] indices) {
 		int vaoID = createVAO();
@@ -24,9 +30,27 @@ public class Loader {
 		return new RawModel(vaoID, indices.length);
 	}
 
+	public int loadTexture(String fileName) {
+		Texture texture = null;
+		try {
+			texture = TextureLoader.getTexture("PNG", new FileInputStream("/res/" + fileName + ".png"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		int textureID = texture.getTextureID();
+		textures.add(textureID);
+		return textureID;
+	}
+
 	public void cleanUp() {
 		vaos.forEach(vao -> GL30.glDeleteVertexArrays(vao));
 		vbos.forEach(vbo -> GL15.glDeleteBuffers(vbo));
+		textures.forEach(texture -> GL11.glDeleteTextures(texture));
 	}
 
 	private int createVAO() {
