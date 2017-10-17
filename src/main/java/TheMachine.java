@@ -1,9 +1,11 @@
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 
+import org.joml.Vector3f;
 import org.lwjgl.Version;
 
 import machine.core.DisplayManager;
 import machine.core.Renderer;
+import machine.entities.Entity;
 import machine.model.Loader;
 import machine.model.RawModel;
 import machine.model.TexturedModel;
@@ -44,26 +46,28 @@ public class TheMachine {
 				0, 1, 3, //
 				3, 1, 2 //
 		};
-		
-		float[] textureCoords = {
-				0, 0, //V0
-				0, 1, //V1
-				1, 1, //V2
-				1, 0
-		};
+
+		float[] textureCoords = { 0, 0, // V0
+				0, 1, // V1
+				1, 1, // V2
+				1, 0 };
 
 		RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
 		ModelTexture texture = new ModelTexture(loader.loadTexture("image"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
-		
+
 		StaticShader shader = new StaticShader();
-		
+
+		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
+
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
 		while (!displayManager.shouldCloseWindow()) {
+			entity.increasePosition(0, 0, 0.002f);
+//			entity.increaseRotation(0, 1, 0);
 			renderer.beginRender();
 			shader.start();
-			renderer.render(texturedModel);
+			renderer.render(entity, shader);
 			shader.stop();
 			renderer.finishRender();
 
@@ -71,7 +75,7 @@ public class TheMachine {
 			// invoked during this call.
 			glfwPollEvents();
 		}
-		
+
 		shader.cleanUp();
 	}
 
