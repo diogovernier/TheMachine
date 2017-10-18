@@ -67,10 +67,13 @@ public class DisplayManager {
 
 		// Setup a key callback. It will be called every time a key is pressed, repeated
 		// or released.
-		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-				glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-		});
+		// glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+		// if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+		// glfwSetWindowShouldClose(window, true); // We will detect this in the
+		// rendering loop
+		// });
+
+		glfwSetKeyCallback(window, new KeyboardHandler());
 
 		GLFW.glfwSetFramebufferSizeCallback(window, (long window, int width, int height) -> {
 			if (width > 0 && height > 0 && (this.fbWidth != width || this.fbHeight != height)) {
